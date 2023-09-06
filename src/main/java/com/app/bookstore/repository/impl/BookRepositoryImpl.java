@@ -1,9 +1,10 @@
 package com.app.bookstore.repository.impl;
 
-import com.app.bookstore.exceptions.EntityNotFoundException;
+import com.app.bookstore.exceptions.DataProcessingException;
 import com.app.bookstore.model.Book;
 import com.app.bookstore.repository.BookRepository;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -29,7 +30,7 @@ public class BookRepositoryImpl implements BookRepository {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new EntityNotFoundException("Can't save the book: " + book, e);
+            throw new DataProcessingException("Can't save the book: " + book, e);
         } finally {
             if (session != null) {
                 session.close();
@@ -42,16 +43,16 @@ public class BookRepositoryImpl implements BookRepository {
         try (Session session = sessionFactory.openSession()) {
             return session.createQuery("FROM Book ", Book.class).getResultList();
         } catch (Exception e) {
-            throw new EntityNotFoundException("Can't get all books", e);
+            throw new DataProcessingException("Can't get all books", e);
         }
     }
 
     @Override
-    public Book getById(Long id) {
+    public Optional<Book> findById(Long id) {
         try (Session session = sessionFactory.openSession()) {
-            return session.get(Book.class, id);
+            return Optional.ofNullable(session.find(Book.class, id));
         } catch (Exception e) {
-            throw new EntityNotFoundException("Cannot get book by id: " + id, e);
+            throw new DataProcessingException("Cannot get book by id: " + id, e);
         }
     }
 }
