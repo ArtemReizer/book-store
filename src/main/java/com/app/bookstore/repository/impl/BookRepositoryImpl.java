@@ -1,23 +1,20 @@
 package com.app.bookstore.repository.impl;
 
+import com.app.bookstore.exceptions.DataProcessingException;
 import com.app.bookstore.model.Book;
 import com.app.bookstore.repository.BookRepository;
 import java.util.List;
-import org.hibernate.HibernateException;
+import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+@RequiredArgsConstructor
 @Repository
 public class BookRepositoryImpl implements BookRepository {
     private final SessionFactory sessionFactory;
-
-    @Autowired
-    public BookRepositoryImpl(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
 
     @Override
     public Book save(Book book) {
@@ -33,7 +30,7 @@ public class BookRepositoryImpl implements BookRepository {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new HibernateException("Can't save the book: " + book, e);
+            throw new DataProcessingException("Can't save the book: " + book, e);
         } finally {
             if (session != null) {
                 session.close();
@@ -46,7 +43,16 @@ public class BookRepositoryImpl implements BookRepository {
         try (Session session = sessionFactory.openSession()) {
             return session.createQuery("FROM Book ", Book.class).getResultList();
         } catch (Exception e) {
-            throw new HibernateException("Can't get all books", e);
+            throw new DataProcessingException("Can't get all books", e);
+        }
+    }
+
+    @Override
+    public Optional<Book> findById(Long id) {
+        try (Session session = sessionFactory.openSession()) {
+            return Optional.ofNullable(session.find(Book.class, id));
+        } catch (Exception e) {
+            throw new DataProcessingException("Cannot get book by id: " + id, e);
         }
     }
 }
