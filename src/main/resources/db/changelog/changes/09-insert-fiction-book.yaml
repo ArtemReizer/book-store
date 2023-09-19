@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-fiction-book
+      author: admin
+      changes:
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Fiction"}
+              - column: {name: description, value: "Fiction books"}
+        - insert:
+            tableName: books
+            columns:
+              - column: {name: title, value: "1984"}
+              - column: {name: author, value: "George Orwell"}
+              - column: {name: isbn, value: 9780198185215}
+              - column: {name: price, value: 19.99}
+
+        - insert:
+            tableName: book_category
+            columns:
+              - column: {name: book_id, value: 1}
+              - column: {name: category_id, value: 1}

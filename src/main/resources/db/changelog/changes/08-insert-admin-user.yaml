@@ -1,0 +1,19 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-admin-user
+      author: artemreizer
+      changes:
+        - insert:
+            tableName: user
+            columns:
+              - column: {name: email, value: "admin@i.ua"}
+              - column: {name: password, value: "$2a$12$ftEl1Rcqcl0C105T7OoEsOQirdSQPVI4xlzVkPJWinZOP/40Dd4WK"}
+              - column: {name: first_name, value: "Admin"}
+              - column: {name: last_name, value: "Administrator"}
+              - column: {name: shipping_address, value: "Kyiv, Ukraine"}
+              - column: {name: is_deleted, valueBoolean: false}
+        - insert:
+            tableName: user_role
+            columns:
+              - column: {name: user_id, value: 1}
+              - column: {name: role_id, value: 1}
