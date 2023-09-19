@@ -1,6 +1,7 @@
 package com.app.bookstore.service;
 
 import com.app.bookstore.dto.CategoryDto;
+import com.app.bookstore.dto.CategoryRequestDto;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
 
@@ -9,9 +10,9 @@ public interface CategoryService {
 
     CategoryDto getById(Long id);
 
-    CategoryDto save(CategoryDto categoryDto);
+    CategoryDto save(CategoryRequestDto categoryRequestDto);
 
-    CategoryDto update(Long id, CategoryDto categoryDto);
+    CategoryDto update(Long id, CategoryRequestDto categoryRequestDto);
 
     void deleteById(Long id);
 }

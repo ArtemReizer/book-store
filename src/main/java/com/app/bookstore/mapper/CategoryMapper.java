@@ -2,6 +2,7 @@ package com.app.bookstore.mapper;
 
 import com.app.bookstore.config.MapperConfig;
 import com.app.bookstore.dto.CategoryDto;
+import com.app.bookstore.dto.CategoryRequestDto;
 import com.app.bookstore.model.Category;
 import org.mapstruct.Mapper;
 
@@ -9,5 +10,5 @@ import org.mapstruct.Mapper;
 public interface CategoryMapper {
     CategoryDto toDto(Category category);
 
-    Category toEntity(CategoryDto categoryDto);
+    Category toEntity(CategoryRequestDto categoryRequestDto);
 }

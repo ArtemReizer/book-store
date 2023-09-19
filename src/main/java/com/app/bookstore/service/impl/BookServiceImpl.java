@@ -1,6 +1,7 @@
 package com.app.bookstore.service.impl;
 
 import com.app.bookstore.dto.BookDto;
+import com.app.bookstore.dto.BookDtoWithoutCategoryIds;
 import com.app.bookstore.dto.BookSearchParametersDto;
 import com.app.bookstore.dto.CreateBookRequestDto;
 import com.app.bookstore.mapper.BookMapper;
@@ -58,6 +59,13 @@ public class BookServiceImpl implements BookService {
         Specification<Book> specification = specificationBuilder.build(params);
         return bookRepository.findAll(specification).stream()
                 .map(bookMapper::toDto)
+                .toList();
+    }
+
+    @Override
+    public List<BookDtoWithoutCategoryIds> findAllByCategoryId(Long id) {
+        return bookRepository.findAllByCategoriesId(id).stream()
+                .map(bookMapper::toDtoWithoutCategoryIds)
                 .toList();
     }
 }
