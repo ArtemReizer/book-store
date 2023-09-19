@@ -16,4 +16,10 @@ databaseChangeLog:
   - include:
       file: db/changelog/changes/08-insert-admin-user.yaml
   - include:
-      file: db/changelog/changes/0*-insert-fiction-book.yaml
+      file: db/changelog/changes/09-insert-fiction-book.yaml
+  - include:
+      file: db/changelog/changes/10-create-cart-table.yaml
+  - include:
+      file: db/changelog/changes/11-create-cart-item-table.yaml
+  - include:
+      file: db/changelog/changes/12-create-cart-for-admin.yaml
