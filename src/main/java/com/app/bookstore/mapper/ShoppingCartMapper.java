@@ -6,9 +6,9 @@ import com.app.bookstore.model.ShoppingCart;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-
-@Mapper(config = MapperConfig.class)
+@Mapper(config = MapperConfig.class, uses = {CartItemMapper.class})
 public interface ShoppingCartMapper {
-    @Mapping(target = "cartItems", ignore = true)
+    @Mapping(target = "cartItems")
+    @Mapping(target = "userId", source = "shoppingCart.user.id")
     ShoppingCartDto toDto(ShoppingCart shoppingCart);
 }

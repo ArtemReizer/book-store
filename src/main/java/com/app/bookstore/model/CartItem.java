@@ -11,6 +11,8 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -27,6 +29,8 @@ public class CartItem {
     @ManyToOne
     @JoinColumn(name = "cart_id", referencedColumnName = "id")
     private ShoppingCart shoppingCart;
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @NotNull
     @OneToOne(fetch = FetchType.LAZY)
     private Book book;
