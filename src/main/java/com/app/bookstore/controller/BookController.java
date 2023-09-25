@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -35,9 +36,8 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "Get book by id")
-    public BookDto getBookById(@PathVariable Long id) {
-        return bookService.getBookById(id);
+    public Optional<BookDto> getBookById(@PathVariable Long id) {
+        return bookService.findBookById(id);
     }
 
     @PostMapping
