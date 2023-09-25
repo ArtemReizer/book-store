@@ -10,7 +10,6 @@ import com.app.bookstore.repository.SpecificationBuilder;
 import com.app.bookstore.repository.book.BookRepository;
 import com.app.bookstore.service.BookService;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -38,11 +37,11 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Optional<BookDto> findBookById(Long id) {
+    public BookDto getBookById(Long id) {
         Book book = bookRepository.findBookById(id).orElseThrow(
                 () -> new EntityNotFoundException("Can't find book with id: " + id)
         );
-        return Optional.ofNullable(bookMapper.toDto(book));
+        return bookMapper.toDto(book);
     }
 
     @Override
