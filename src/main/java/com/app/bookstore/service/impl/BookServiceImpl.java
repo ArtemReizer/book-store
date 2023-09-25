@@ -3,12 +3,14 @@ package com.app.bookstore.service.impl;
 import com.app.bookstore.dto.BookDto;
 import com.app.bookstore.dto.BookSearchParametersDto;
 import com.app.bookstore.dto.CreateBookRequestDto;
+import com.app.bookstore.exceptions.EntityNotFoundException;
 import com.app.bookstore.mapper.BookMapper;
 import com.app.bookstore.model.Book;
 import com.app.bookstore.repository.SpecificationBuilder;
 import com.app.bookstore.repository.book.BookRepository;
 import com.app.bookstore.service.BookService;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -35,8 +37,11 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookDto getBookById(Long id) {
-        return bookMapper.toDto(bookRepository.getBookById(id));
+    public Optional<BookDto> findBookById(Long id) {
+        Book book = bookRepository.findBookById(id).orElseThrow(
+                () -> new EntityNotFoundException("Can't find book with id: " + id)
+        );
+        return Optional.ofNullable(bookMapper.toDto(book));
     }
 
     @Override
