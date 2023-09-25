@@ -17,6 +17,7 @@ import com.app.bookstore.repository.cart.ShoppingCartRepository;
 import com.app.bookstore.repository.order.OrderItemRepository;
 import com.app.bookstore.repository.order.OrderRepository;
 import com.app.bookstore.service.OrderService;
+import com.app.bookstore.service.ShoppingCartService;
 import com.app.bookstore.service.UserService;
 import java.math.BigDecimal;
 import java.util.HashSet;
@@ -25,12 +26,12 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
     private final ShoppingCartRepository cartRepository;
+    private final ShoppingCartService shoppingCartService;
     private final OrderItemMapper orderItemMapper;
     private final OrderMapper orderMapper;
     private final OrderRepository orderRepository;
@@ -39,31 +40,29 @@ public class OrderServiceImpl implements OrderService {
     private final CartItemRepository cartItemRepository;
 
     @Override
-    @Transactional
     public OrderDto createOrder(PlaceOrderRequestDto request) {
         ShoppingCart cart = getShoppingCart();
-        User user = userService.getAuthenticatedUser();
         Set<CartItem> cartItems = new HashSet<>(
                 cartItemRepository.findCartItemsByShoppingCartId(cart.getId()));
         cart.setCartItems(cartItems);
         Order order = orderMapper.toOrder(cart, request);
-        order.setUser(user);
         order.setShippingAddress(request.getShippingAddress());
         order.setTotal(calculateTotal(order.getOrderItems()));
         Order savedOrder = saveOrderWithItems(cartItems, order);
+        shoppingCartService.clear(cart);
         return orderMapper.toDto(savedOrder);
     }
 
     @Override
     public OrderDto updateOrderStatus(Long orderId, UpdateOrderStatusRequestDto request) {
-        Order order = findOrderById(orderId);
+        Order order = orderRepository.findOrderItemsByOrderId(orderId);
         order.setStatus(request.getStatus());
         return orderMapper.toDto(orderRepository.save(order));
     }
 
     @Override
     public OrderItemDto getItemById(Long orderId, Long itemId) {
-        Order order = findOrderById(orderId);
+        Order order = orderRepository.findOrderItemsByOrderId(orderId);
         OrderItem orderItem = order.getOrderItems().stream()
                 .filter(item -> item.getId().equals(itemId))
                 .findFirst()
@@ -75,7 +74,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Set<OrderItemDto> getAllOrderItems(Long orderId) {
-        Order order = findOrderById(orderId);
+        Order order = orderRepository.findOrderItemsByOrderId(orderId);
         Set<OrderItem> orderItems = order.getOrderItems();
         return orderItems.stream()
                 .map(orderItemMapper::toDto)
@@ -84,7 +83,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Set<OrderDto> getAllOrders(Pageable pageable, Long userId) {
-        return orderRepository.findAllByUserId(pageable, userId).stream()
+        return orderRepository.findAllByUserId(pageable, userId)
+                .stream()
                 .map(orderMapper::toDto)
                 .collect(Collectors.toSet());
     }
@@ -104,11 +104,6 @@ public class OrderServiceImpl implements OrderService {
             total = total.add(itemCost);
         }
         return total;
-    }
-
-    private Order findOrderById(Long orderId) {
-        return orderRepository.findById(orderId).orElseThrow(
-                () -> new EntityNotFoundException("Can't find order by id " + orderId));
     }
 
     private Order saveOrderWithItems(Set<CartItem> cartItems, Order order) {

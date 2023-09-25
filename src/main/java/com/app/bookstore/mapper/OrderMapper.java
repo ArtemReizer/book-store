@@ -14,7 +14,7 @@ public interface OrderMapper {
     @Mapping(target = "orderItems", source = "orderItems")
     OrderDto toDto(Order order);
 
-    @Mapping(target = "id")
+    @Mapping(target = "id", ignore = true)
     @Mapping(target = "status", constant = "PENDING")
     @Mapping(target = "total", ignore = true)
     @Mapping(target = "orderItems", source = "shoppingCart.cartItems")

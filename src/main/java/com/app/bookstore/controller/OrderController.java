@@ -5,6 +5,7 @@ import com.app.bookstore.dto.order.OrderItemDto;
 import com.app.bookstore.dto.order.PlaceOrderRequestDto;
 import com.app.bookstore.dto.order.UpdateOrderStatusRequestDto;
 import com.app.bookstore.service.OrderService;
+import com.app.bookstore.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.Set;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Order management")
 public class OrderController {
     private final OrderService orderService;
+    private final UserService userService;
 
     @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping
@@ -36,7 +38,8 @@ public class OrderController {
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping
     @Operation(summary = "Returns all user's orders")
-    public Set<OrderDto> getAllUserOrders(Pageable pageable, Long userId) {
+    public Set<OrderDto> getAllUserOrders(Pageable pageable) {
+        Long userId = userService.getAuthenticatedUser().getId();
         return orderService.getAllOrders(pageable, userId);
     }
 
