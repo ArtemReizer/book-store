@@ -4,6 +4,7 @@ import com.app.bookstore.dto.BookDto;
 import com.app.bookstore.dto.CreateBookRequestDto;
 import com.app.bookstore.service.BookService;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,8 +25,8 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
-    public BookDto getBookById(@PathVariable Long id) {
-        return bookService.findById(id);
+    public Optional<BookDto> getBookById(@PathVariable Long id) {
+        return bookService.findBookById(id);
     }
 
     @PostMapping
