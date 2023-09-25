@@ -7,6 +7,7 @@ import com.app.bookstore.exceptions.RegistrationException;
 import com.app.bookstore.mapper.UserMapper;
 import com.app.bookstore.model.Role;
 import com.app.bookstore.model.RoleName;
+import com.app.bookstore.model.ShoppingCart;
 import com.app.bookstore.model.User;
 import com.app.bookstore.repository.cart.ShoppingCartRepository;
 import com.app.bookstore.repository.role.RoleRepository;
@@ -39,6 +40,9 @@ public class UserServiceImpl implements UserService {
         Role role = roleRepository.getByName(RoleName.ROLE_USER);
         user.setRoles(Set.of(role));
         User savedUser = userRepository.save(user);
+        ShoppingCart shoppingCart = new ShoppingCart();
+        shoppingCart.setUser(savedUser);
+        shoppingCartRepository.save(shoppingCart);
         return userMapper.toUserResponse(savedUser);
     }
 

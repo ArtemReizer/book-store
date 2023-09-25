@@ -8,7 +8,7 @@ import java.util.Set;
 import org.springframework.data.domain.Pageable;
 
 public interface OrderService {
-    OrderDto createOrder(Long userId, PlaceOrderRequestDto request);
+    OrderDto createOrder(PlaceOrderRequestDto request);
 
     OrderDto updateOrderStatus(Long orderId, UpdateOrderStatusRequestDto request);
 

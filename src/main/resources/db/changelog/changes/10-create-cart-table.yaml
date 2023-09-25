@@ -17,6 +17,9 @@ databaseChangeLog:
                   name: user_id
                   type: bigint
                   constraints:
+                    foreignKeyName: fk_user_id
+                    referencedTableName: user
+                    referencedColumnNames: id
                     nullable: false
               - column:
                   name: is_deleted
