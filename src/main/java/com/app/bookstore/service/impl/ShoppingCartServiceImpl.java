@@ -62,7 +62,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         cartItemRepository.deleteById(cartItemId);
     }
 
-
     @Override
     public void clear(ShoppingCart cart) {
         cartItemRepository.deleteAll(cart.getCartItems());
