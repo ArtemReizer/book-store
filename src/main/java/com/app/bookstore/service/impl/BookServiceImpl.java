@@ -4,7 +4,6 @@ import com.app.bookstore.dto.BookDto;
 import com.app.bookstore.dto.BookDtoWithoutCategoryIds;
 import com.app.bookstore.dto.BookSearchParametersDto;
 import com.app.bookstore.dto.CreateBookRequestDto;
-import com.app.bookstore.exceptions.EntityNotFoundException;
 import com.app.bookstore.mapper.BookMapper;
 import com.app.bookstore.model.Book;
 import com.app.bookstore.repository.SpecificationBuilder;
