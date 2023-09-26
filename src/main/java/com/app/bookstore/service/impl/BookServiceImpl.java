@@ -4,6 +4,7 @@ import com.app.bookstore.dto.BookDto;
 import com.app.bookstore.dto.BookDtoWithoutCategoryIds;
 import com.app.bookstore.dto.BookSearchParametersDto;
 import com.app.bookstore.dto.CreateBookRequestDto;
+import com.app.bookstore.exceptions.EntityNotFoundException;
 import com.app.bookstore.mapper.BookMapper;
 import com.app.bookstore.model.Book;
 import com.app.bookstore.repository.SpecificationBuilder;
@@ -38,7 +39,10 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDto getBookById(Long id) {
-        return bookMapper.toDto(bookRepository.getBookById(id));
+        Book book = bookRepository.findBookById(id).orElseThrow(
+                () -> new EntityNotFoundException("Can't find book with id: " + id)
+        );
+        return bookMapper.toDto(book);
     }
 
     @Override
