@@ -45,7 +45,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     public PutCartItemRequestDto updateCartItem(Long cartItemId,
                                                 PutCartItemRequestDto cartItemRequestDto) {
         CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(
-                () -> new EntityNotFoundException("Can't find cart item by its id: " + cartItemId)
+                () -> new EntityNotFoundException("Can't find cart item by id: " + cartItemId)
         );
         cartItem.setQuantity(cartItemRequestDto.getQuantity());
         return cartItemMapper.toPutRequestDto(cartItemRepository.save(cartItem));
@@ -53,7 +53,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     public ShoppingCartDto getShoppingCart() {
-        return shoppingCartMapper.toDto(findShoppingCartOfUser()
+        return shoppingCartMapper.toDto(findCurrentUserShoppingCart()
                 .orElseGet(this::createShoppingCart));
     }
 
@@ -62,13 +62,14 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         cartItemRepository.deleteById(cartItemId);
     }
 
+
     @Override
     public void clear(ShoppingCart cart) {
         cartItemRepository.deleteAll(cart.getCartItems());
         cart.getCartItems().clear();
     }
-
-    private Optional<ShoppingCart> findShoppingCartOfUser() {
+  
+    private Optional<ShoppingCart> findCurrentUserShoppingCart() {
         User currentUser = userService.getAuthenticatedUser();
         Optional<ShoppingCart> cart = shoppingCartRepository.findByUserId(currentUser.getId());
         cart.ifPresent(cartEntity -> {

@@ -32,8 +32,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserRegistrationResponseDto register(UserRegistrationRequestDto request)
             throws RegistrationException {
-        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-            throw new RegistrationException("The user is already registered");
+        String userEmail = request.getEmail();
+        if (userRepository.findByEmail(userEmail).isPresent()) {
+            throw new RegistrationException("The user with email: " + userEmail
+                    + " is already registered");
         }
         User user = userMapper.toModel(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
@@ -51,6 +53,6 @@ public class UserServiceImpl implements UserService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return userRepository.findByEmail(authentication.getName())
                 .orElseThrow(() -> new EntityNotFoundException(
-                        "Can't find user with email " + authentication.getName()));
+                        "Can't find user with name: " + authentication.getName()));
     }
 }
