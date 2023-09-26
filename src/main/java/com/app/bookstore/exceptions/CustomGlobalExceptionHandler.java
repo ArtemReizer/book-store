@@ -10,6 +10,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -29,6 +30,15 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
                 .toList();
         errorResponse.setErrors(errors);
         return new ResponseEntity<>(errorResponse, headers, statusCode);
+    }
+
+    @ExceptionHandler({RegistrationException.class})
+    protected ResponseEntity<Object> handleRegistrationException(
+            RegistrationException ex
+    ) {
+        ErrorResponse response = new ErrorResponse(
+                LocalDateTime.now(), HttpStatus.FORBIDDEN, List.of(ex.getMessage()));
+        return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
     }
 
     private String getErrorMessage(ObjectError error) {

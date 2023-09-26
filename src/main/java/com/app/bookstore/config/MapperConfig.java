@@ -1,14 +1,13 @@
 package com.app.bookstore.config;
 
 import org.mapstruct.InjectionStrategy;
-import org.mapstruct.MapperConfig;
 import org.mapstruct.NullValueCheckStrategy;
 
-@MapperConfig(
+@org.mapstruct.MapperConfig(
         componentModel = "spring",
         injectionStrategy = InjectionStrategy.CONSTRUCTOR,
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS,
         implementationPackage = "<PACKAGE_NAME>.impl"
 )
-public class MapperConfiguration {
+public class MapperConfig {
 }
