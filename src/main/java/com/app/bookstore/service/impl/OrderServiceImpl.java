@@ -21,6 +21,7 @@ import com.app.bookstore.service.ShoppingCartService;
 import com.app.bookstore.service.UserService;
 import java.math.BigDecimal;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -55,30 +56,38 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDto updateOrderStatus(Long orderId, UpdateOrderStatusRequestDto request) {
-        Order order = orderRepository.findOrderItemsByOrderId(orderId);
+        Order order = orderRepository.findOrderByOrderId(orderId);
         order.setStatus(request.getStatus());
         return orderMapper.toDto(orderRepository.save(order));
     }
 
     @Override
     public OrderItemDto getItemById(Long orderId, Long itemId) {
-        Order order = orderRepository.findOrderItemsByOrderId(orderId);
-        OrderItem orderItem = order.getOrderItems().stream()
-                .filter(item -> item.getId().equals(itemId))
-                .findFirst()
-                .orElseThrow(
-                        () -> new EntityNotFoundException("Can't find order item with id "
-                                + itemId));
-        return orderItemMapper.toDto(orderItem);
+        User user = userService.getAuthenticatedUser();
+        Order order = orderRepository.findOrderByOrderId(orderId);
+        if (Objects.equals(order.getUser().getId(), user.getId())) {
+            OrderItem orderItem = order.getOrderItems().stream()
+                    .filter(item -> item.getId().equals(itemId))
+                    .findFirst()
+                    .orElseThrow(
+                            () -> new EntityNotFoundException("Can't find order item with id "
+                                    + itemId));
+            return orderItemMapper.toDto(orderItem);
+        }
+        throw new EntityNotFoundException("Can't find order with id: " + orderId);
     }
 
     @Override
     public Set<OrderItemDto> getAllOrderItems(Long orderId) {
-        Order order = orderRepository.findOrderItemsByOrderId(orderId);
-        Set<OrderItem> orderItems = order.getOrderItems();
-        return orderItems.stream()
-                .map(orderItemMapper::toDto)
-                .collect(Collectors.toSet());
+        User user = userService.getAuthenticatedUser();
+        Order order = orderRepository.findOrderByOrderId(orderId);
+        if (Objects.equals(order.getUser().getId(), user.getId())) {
+            Set<OrderItem> orderItems = order.getOrderItems();
+            return orderItems.stream()
+                    .map(orderItemMapper::toDto)
+                    .collect(Collectors.toSet());
+        }
+        throw new EntityNotFoundException("Can't find order with id: " + orderId);
     }
 
     @Override

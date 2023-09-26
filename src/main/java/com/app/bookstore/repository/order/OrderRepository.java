@@ -21,5 +21,5 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             LEFT JOIN FETCH o.orderItems oi
             WHERE o.id = :orderId
             """)
-    Order findOrderItemsByOrderId(Long orderId);
+    Order findOrderByOrderId(Long orderId);
 }
