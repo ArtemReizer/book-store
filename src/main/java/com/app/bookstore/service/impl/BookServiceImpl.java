@@ -1,9 +1,9 @@
 package com.app.bookstore.service.impl;
 
 import com.app.bookstore.dto.BookDto;
+import com.app.bookstore.dto.BookDtoWithoutCategoryIds;
 import com.app.bookstore.dto.BookSearchParametersDto;
 import com.app.bookstore.dto.CreateBookRequestDto;
-import com.app.bookstore.exceptions.EntityNotFoundException;
 import com.app.bookstore.mapper.BookMapper;
 import com.app.bookstore.model.Book;
 import com.app.bookstore.repository.SpecificationBuilder;
@@ -24,7 +24,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDto save(CreateBookRequestDto requestDto) {
-        Book book = bookMapper.toModel(requestDto);
+        Book book = bookMapper.toEntity(requestDto);
         return bookMapper.toDto(bookRepository.save(book));
     }
 
@@ -38,15 +38,12 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDto getBookById(Long id) {
-        Book book = bookRepository.findBookById(id).orElseThrow(
-                () -> new EntityNotFoundException("Can't find book with id: " + id)
-        );
-        return bookMapper.toDto(book);
+        return bookMapper.toDto(bookRepository.getBookById(id));
     }
 
     @Override
     public BookDto update(CreateBookRequestDto requestDto, Long id) {
-        Book book = bookMapper.toModel(requestDto);
+        Book book = bookMapper.toEntity(requestDto);
         book.setId(id);
         Book savedBook = bookRepository.save(book);
         return bookMapper.toDto(savedBook);
@@ -62,6 +59,13 @@ public class BookServiceImpl implements BookService {
         Specification<Book> specification = specificationBuilder.build(params);
         return bookRepository.findAll(specification).stream()
                 .map(bookMapper::toDto)
+                .toList();
+    }
+
+    @Override
+    public List<BookDtoWithoutCategoryIds> findAllByCategoryId(Long id) {
+        return bookRepository.findAllByCategoriesId(id).stream()
+                .map(bookMapper::toDtoWithoutCategoryIds)
                 .toList();
     }
 }
