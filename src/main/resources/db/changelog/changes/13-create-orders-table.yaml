@@ -17,6 +17,9 @@ databaseChangeLog:
                   name: user_id
                   type: bigint
                   constraints:
+                    foreignKeyName: fk_users_id
+                    referencedTableName: user
+                    referencedColumnNames: id
                     nullable: false
               - column:
                   name: total
