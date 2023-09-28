@@ -18,6 +18,7 @@ import com.app.bookstore.service.UserService;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -63,6 +64,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
+    @Transactional
     public void clear(ShoppingCart cart) {
         cartItemRepository.deleteAll(cart.getCartItems());
         cart.getCartItems().clear();
