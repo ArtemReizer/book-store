@@ -8,6 +8,7 @@ import com.app.bookstore.service.ShoppingCartService;
 import com.app.bookstore.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -41,7 +42,8 @@ public class ShoppingCartController {
     @PreAuthorize("hasRole('ROLE_USER')")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Add a cart item to the shopping cart")
-    public CartItemDto addCartItem(@RequestBody CreateCartItemRequestDto cartItemRequestDto) {
+    public CartItemDto addCartItem(
+            @RequestBody @Valid CreateCartItemRequestDto cartItemRequestDto) {
         return shoppingCartService.create(cartItemRequestDto,
                 userService.getAuthenticatedUser().getId());
     }
@@ -50,7 +52,7 @@ public class ShoppingCartController {
     @PreAuthorize("hasRole('ROLE_USER')")
     @Operation(summary = "Update the quantity of cart items in cart")
     public PutCartItemRequestDto updateCartItem(
-            @RequestBody PutCartItemRequestDto cartItemRequestDto,
+            @RequestBody @Valid PutCartItemRequestDto cartItemRequestDto,
             @PathVariable Long cartItemId) {
         return shoppingCartService.updateCartItem(cartItemId, cartItemRequestDto);
     }

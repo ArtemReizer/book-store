@@ -32,7 +32,7 @@ public class CartItem {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @NotNull
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.LAZY)
     private Book book;
     @NotNull
     private int quantity;

@@ -8,6 +8,7 @@ import com.app.bookstore.service.OrderService;
 import com.app.bookstore.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -31,7 +32,7 @@ public class OrderController {
     @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping
     @Operation(summary = "Place a new order")
-    public OrderDto placeOrder(@RequestBody PlaceOrderRequestDto placeOrderRequestDto) {
+    public OrderDto placeOrder(@RequestBody @Valid PlaceOrderRequestDto placeOrderRequestDto) {
         return orderService.createOrder(placeOrderRequestDto);
     }
 
