@@ -4,6 +4,7 @@ import com.app.bookstore.config.MapperConfig;
 import com.app.bookstore.dto.CartItemDto;
 import com.app.bookstore.dto.PutCartItemRequestDto;
 import com.app.bookstore.model.CartItem;
+import com.app.bookstore.model.OrderItem;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -14,4 +15,7 @@ public interface CartItemMapper {
     CartItemDto toDto(CartItem cartItem);
 
     PutCartItemRequestDto toPutRequestDto(CartItem cartItem);
+
+    @Mapping(target = "id", ignore = true)
+    OrderItem toOrderItem(CartItem cartItem);
 }

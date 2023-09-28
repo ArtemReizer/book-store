@@ -21,3 +21,17 @@ databaseChangeLog:
             columns:
               - column: {name: book_id, valueComputed: (SELECT id FROM books WHERE isbn = 9780198185215)}
               - column: {name: category_id, valueComputed: (SELECT id FROM categories WHERE name = 'Fiction')}
+
+        - insert:
+            tableName: books
+            columns:
+              - column: { name: title, value: "Forest Gump" }
+              - column: { name: author, value: "Winston Groom" }
+              - column: { name: isbn, value: 9780552996099 }
+              - column: { name: price, value: 99.99 }
+
+        - insert:
+            tableName: book_category
+            columns:
+              - column: { name: book_id, valueComputed: (SELECT id FROM books WHERE isbn = 9780552996099)}
+              - column: { name: category_id, valueComputed: (SELECT id FROM categories WHERE name = 'Fiction')}

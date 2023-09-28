@@ -8,8 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 public interface ShoppingCartRepository extends JpaRepository<ShoppingCart, Long> {
     @Query("""
             FROM ShoppingCart sc
-            INNER JOIN FETCH sc.cartItems i
-            INNER JOIN FETCH i.book
+            LEFT JOIN FETCH sc.cartItems ci
+            LEFT JOIN FETCH ci.book
             WHERE sc.user.id = :userId
             """)
     Optional<ShoppingCart> findByUserId(Long userId);
