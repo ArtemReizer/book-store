@@ -1,6 +1,7 @@
 package com.app.bookstore.controller;
 
 import com.app.bookstore.dto.BookDto;
+import com.app.bookstore.dto.BookDtoWithoutCategoryIds;
 import com.app.bookstore.dto.BookSearchParametersDto;
 import com.app.bookstore.dto.CreateBookRequestDto;
 import com.app.bookstore.service.BookService;
@@ -65,7 +66,7 @@ public class BookController {
 
     @GetMapping("/search")
     @Operation(summary = "Search books by parameters")
-    public List<BookDto> search(BookSearchParametersDto params) {
+    public List<BookDtoWithoutCategoryIds> search(BookSearchParametersDto params) {
         return bookService.search(params);
     }
 }

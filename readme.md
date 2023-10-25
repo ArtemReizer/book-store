@@ -83,3 +83,36 @@ Here are the steps to set up and run the Book Store API locally without docker:
    Create a *book_store* schema and update the username and password in *application.properties* with your credentials
       **Congratulations, you've successfully set up and launched the Book Store API on your local machine!**
 
+## Postman Collection
+
+To simplify your experience, I've curated a Postman collection containing sample requests for different API endpoints. Feel free to download it [here](Book%20Store.postman_collection.json) and import it into your Postman workspace. This will enable you to swiftly initiate your testing and exploration of the Book Store API. Happy testing!
+
+## Challenges and Solutions
+
+During the development of the Online Book Store project, we encountered several challenges that shaped our journey in creating a robust e-commerce platform. Let's delve into these challenges and the solutions we implemented to overcome them.
+
+### Challenge 1: Data Modeling and Building Different Views
+
+**Issue**: Designing a flexible data model for books, users, orders, and categories while ensuring users only see necessary data.
+
+**Solution**: We utilized Spring Data JPA and Liquibase to create an adaptable schema. Additionally, we implemented a pattern Dto to present customized views of the data.
+
+### Challenge 2: Security
+
+**Issue**: Ensuring robust data security and user authentication to safeguard user information.
+
+**Solution**: We implemented Spring Security and JWT tokens, providing a secure environment and reliable user authentication mechanism.
+
+### Challenge 3: Exception Handling
+
+**Issue**: Systematically handling errors and exceptions to improve user experience.
+
+**Solution**: We developed a global error handler and custom exceptions, enhancing error reporting and ensuring a seamless user experience.
+
+## Video presentation of the project [here](https://www.loom.com/share/9b42f2edb5394992aa39f8715dd2c467?sid=ccf1222b-12fd-4e6e-a746-c32ffa940a21) 
+
+## Conclusion
+
+The Bookstore API offers a robust framework for constructing a book-selling platform. Whether you're launching a new online bookstore or refining an existing one, this API streamlines the management of books, orders, and customers with great efficiency.
+
+We appreciate your interest in the Book Store API! Thank you!

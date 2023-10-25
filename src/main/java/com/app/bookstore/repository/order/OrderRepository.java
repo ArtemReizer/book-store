@@ -20,8 +20,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             FROM Order o
             LEFT JOIN FETCH o.orderItems oi
             LEFT JOIN FETCH o.user u
-            WHERE u.id =: userId
-            AND o.id =: orderId
+            WHERE u.id = :userId
+            AND o.id = :orderId
             """)
     Order findOrderByOrderId(Long orderId, Long userId);
 }
