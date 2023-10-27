@@ -10,22 +10,29 @@ import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Component
-public class BookSpecificationBuilder implements SpecificationBuilder<Book> {
+public class BookSpecificationBuilder implements SpecificationBuilder<Book,
+        BookSearchParametersDto> {
     private final SpecificationProviderManager<Book> bookSpecificationProviderManager;
 
     @Override
-    public Specification<Book> build(BookSearchParametersDto searchParameters) {
-        Specification<Book> spec = Specification.where(null);
-        if (searchParameters.authors() != null && searchParameters.authors().length > 0) {
-            spec = spec.and(bookSpecificationProviderManager
-                    .getSpecificationProvider("author")
-                    .getSpecification(searchParameters.authors()));
+    public Specification<Book> build(BookSearchParametersDto searchParams) {
+        Specification<Book> specification = Specification.where(null);
+        if (isParameterPresent(searchParams.authors())) {
+            specification = addSpecification(specification, "author", searchParams.authors());
         }
-        if (searchParameters.titles() != null && searchParameters.titles().length > 0) {
-            spec = spec.and(bookSpecificationProviderManager
-                    .getSpecificationProvider("title")
-                    .getSpecification(searchParameters.titles()));
+        if (isParameterPresent(searchParams.titles())) {
+            specification = addSpecification(specification, "title", searchParams.titles());
         }
-        return spec;
+        return specification;
+    }
+
+    private boolean isParameterPresent(String[] param) {
+        return param != null && param.length > 0;
+    }
+
+    private Specification<Book> addSpecification(Specification<Book> specification,
+                                                 String key, String[] params) {
+        return specification.and(bookSpecificationProviderManager
+                .getSpecificationProvider(key).getSpecification(params));
     }
 }

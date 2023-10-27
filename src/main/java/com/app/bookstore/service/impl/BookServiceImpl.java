@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
-    private final SpecificationBuilder<Book> specificationBuilder;
+    private final SpecificationBuilder<Book, BookSearchParametersDto> specificationBuilder;
 
     @Override
     public BookDto save(CreateBookRequestDto requestDto) {
@@ -30,7 +30,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<BookDto> findAll(Pageable pageable) {
-        return bookRepository.findAll(pageable)
+        return bookRepository.findAllWithCategories(pageable)
                 .stream()
                 .map(bookMapper::toDto)
                 .toList();
@@ -55,10 +55,10 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookDto> search(BookSearchParametersDto params) {
+    public List<BookDtoWithoutCategoryIds> search(BookSearchParametersDto params) {
         Specification<Book> specification = specificationBuilder.build(params);
         return bookRepository.findAll(specification).stream()
-                .map(bookMapper::toDto)
+                .map(bookMapper::toDtoWithoutCategoryIds)
                 .toList();
     }
 
