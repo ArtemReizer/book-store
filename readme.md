@@ -69,14 +69,11 @@ Here are the steps to set up and run the Book Store API locally without docker:
    ```shell
    mvn clean install
    ```
-3. **Comment docker compose dependency:**
+3. **Run application:**
 
-   Please comment out lines 99-102 in the pom.xml file and then reload all Maven projects. Ensure the dependency appears as follows:
+   Run application by using this command. Replace ***application*** in application.jar with actual name of the generated JAR file in target directory.
    ```shell 
-      <!--<dependency>
-           <groupId>org.springframework.boot</groupId>
-           <artifactId>spring-boot-docker-compose</artifactId>
-       </dependency>-->
+      java -jar target/application.jar
    ```
 4. **Configure a DB on your local machine:**
 
@@ -110,6 +107,10 @@ During the development of the Online Book Store project, we encountered several 
 **Solution**: We developed a global error handler and custom exceptions, enhancing error reporting and ensuring a seamless user experience.
 
 ## Video presentation of the project [here](https://www.loom.com/share/9b42f2edb5394992aa39f8715dd2c467?sid=ccf1222b-12fd-4e6e-a746-c32ffa940a21) 
+
+## Contribution
+
+We appreciate community contributions to enhance our Book Store API project. Whether you want to fix bugs, add features, or improve documentation, your help is valuable.
 
 ## Conclusion
 
